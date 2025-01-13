@@ -1,0 +1,25 @@
+{
+  "key": "asisOperationFlow",
+  "value": [
+    {
+      "id": "契約書の自動生成",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    actor 契約担当者\\n    actor 法務担当者\\n    participant システム\\n    participant 契約書DB\\n    \\n    契約担当者->>システム: 契約書作成画面を開く\\n    システム->>契約書DB: 基本契約書テンプレート取得\\n    契約書DB-->>システム: テンプレート返却\\n    システム-->>契約担当者: テンプレート表示\\n    \\n    契約担当者->>システム: 契約情報入力\\n    契約担当者->>システム: 不要条項の削除指定\\n    システム->>システム: 条項番号自動調整\\n    システム->>システム: Markdown形式で保存\\n    \\n    alt PDF出力要求\\n        契約担当者->>システム: PDF出力要求\\n        システム->>システム: PDF変換処理\\n        システム-->>契約担当者: PDF出力\\n    end\\n    \\n    alt 法務確認必要\\n        契約担当者->>法務担当者: 内容確認依頼\\n        法務担当者->>システム: 契約書内容確認\\n        alt 修正必要\\n            法務担当者->>システム: 修正指示入力\\n            システム-->>契約担当者: 修正依頼通知\\n        else 承認\\n            法務担当者->>システム: 承認\\n            システム-->>契約担当者: 承認通知\\n        end\\n    end\"\n}"
+    },
+    {
+      "id": "不要条項の削除",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    participant 契約担当者\\n    participant 契約書作成システム\\n    participant 法務担当者\\n    契約担当者->>契約書作成システム: 契約書を選択\\n    契約書作成システム-->>契約担当者: 契約書テンプレート表示\\n    契約担当者->>契約書作成システム: 不要条項を選択\\n    契約書作成システム-->>契約担当者: 選択条項の削除確認\\n    契約担当者->>契約書作成システム: 削除確認\\n    契約書作成システム-->>契約担当者: 条項削除実行\\n    契約書作成システム-->>契約担当者: 条項番号自動調整\\n    契約担当者->>法務担当者: 契約書確認依頼\\n    法務担当者->>契約書作成システム: 契約書内容確認\\n    法務担当者-->>契約担当者: 承認または修正指示\"\n}"
+    },
+    {
+      "id": "条項番号の自動調整",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    participant User as 契約担当者/法務担当者\\n    participant System as システム\\n    participant Doc as 契約書\\n    User->>System: 条項削除を選択\\n    System->>Doc: 該当条項の削除\\n    System->>System: 条項番号の再計算\\n    System->>Doc: 条項番号の更新\\n    System->>System: 関連する参照番号の検索\\n    System->>Doc: 参照番号の自動更新\\n    System->>User: 更新後の契約書を表示\\n    User->>System: 内容確認\\n    User->>System: 確定処理\\n    System->>Doc: 最終的な契約書を保存\"\n}"
+    },
+    {
+      "id": "Markdown形式での原本保存",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    participant 契約担当者\\n    participant システム\\n    participant 原本保管領域\\n    participant 文書変換サービス\\n    participant PDF保存領域\\n    契約担当者->>システム: 契約書作成要求\\n    システム->>システム: 契約書生成処理\\n    システム->>原本保管領域: Markdown形式で保存\\n    原本保管領域-->>システム: 保存完了通知\\n    システム->>文書変換サービス: Markdown to PDF変換要求\\n    文書変換サービス->>文書変換サービス: PDF変換処理\\n    文書変換サービス->>PDF保存領域: PDF保存\\n    PDF保存領域-->>システム: 保存完了通知\\n    システム-->>契約担当者: 契約書作成完了通知\"\n}"
+    },
+    {
+      "id": "PDF形式での出力",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    participant User as 契約担当者/法務担当者\\n    participant System as 契約書作成システム\\n    participant Storage as ストレージ\\n    User->>System: 契約書生成依頼\\n    System->>Storage: Markdown形式の契約書取得\\n    Storage-->>System: Markdown契約書データ\\n    System->>System: Markdown形式からPDFへ変換\\n    System-->>User: PDF形式の契約書を表示\\n    User->>System: PDF出力指示\\n    System-->>User: PDF形式の契約書をダウンロード\"\n}"
+    }
+  ]
+}

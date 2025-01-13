@@ -1,0 +1,185 @@
+{
+  "key": "functionsList",
+  "value": [
+    {
+      "id": "FUN-001",
+      "category": "契約書作成",
+      "function_name": "基本契約書登録",
+      "description": "基本となる契約書のテンプレートをシステムに登録する。",
+      "input": "契約書テンプレート（Markdown形式）",
+      "output": "登録された契約書テンプレート",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-002",
+      "category": "契約書作成",
+      "function_name": "契約書情報入力",
+      "description": "契約書生成に必要な名称、日付、金額などの情報を入力する。",
+      "input": "契約書情報（名称、日付、金額など）",
+      "output": "入力された契約書情報",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-003",
+      "category": "契約書作成",
+      "function_name": "契約書自動生成",
+      "description": "入力された情報と基本契約書テンプレートに基づき、契約書を自動生成する。",
+      "input": "契約書情報、基本契約書テンプレート",
+      "output": "自動生成された契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-004",
+      "category": "契約書作成",
+      "function_name": "条項一覧表示",
+      "description": "生成された契約書の条項を一覧表示する。",
+      "input": "生成された契約書",
+      "output": "条項一覧",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-005",
+      "category": "契約書作成",
+      "function_name": "条項削除",
+      "description": "契約書から不要な条項を削除する。",
+      "input": "削除対象の条項",
+      "output": "削除された条項後の契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-006",
+      "category": "契約書作成",
+      "function_name": "条項番号自動調整",
+      "description": "条項の削除や追加に応じて条項番号を自動的に調整する。",
+      "input": "条項が変更された契約書",
+      "output": "条項番号が調整された契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-007",
+      "category": "契約書管理",
+      "function_name": "契約書Markdown保存",
+      "description": "生成された契約書の原本をMarkdown形式で保存する。",
+      "input": "生成された契約書",
+      "output": "Markdown形式の契約書ファイル",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-008",
+      "category": "契約書出力",
+      "function_name": "契約書PDF出力",
+      "description": "生成された契約書をPDF形式で出力する。",
+      "input": "生成された契約書",
+      "output": "PDF形式の契約書ファイル",
+      "user": "契約担当者, 法務担当者"
+    },
+    {
+      "id": "FUN-009",
+      "category": "契約書作成",
+      "function_name": "契約書テンプレート選択",
+      "description": "登録された基本契約書テンプレートを選択する。",
+      "input": "なし",
+      "output": "契約書テンプレート一覧",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-010",
+      "category": "契約書管理",
+      "function_name": "契約書検索",
+      "description": "保存された契約書を検索する。",
+      "input": "検索条件",
+      "output": "検索結果の契約書一覧",
+      "user": "契約担当者, 法務担当者"
+    },
+    {
+      "id": "FUN-011",
+      "category": "契約書管理",
+      "function_name": "契約書一覧表示",
+      "description": "保存された契約書の一覧を表示する。",
+      "input": "なし",
+      "output": "契約書一覧",
+      "user": "契約担当者, 法務担当者"
+    },
+    {
+      "id": "FUN-012",
+      "category": "契約書作成",
+      "function_name": "条項追加",
+      "description": "契約書に新しい条項を追加する。",
+      "input": "追加する条項の内容",
+      "output": "条項が追加された契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-013",
+      "category": "契約書作成",
+      "function_name": "条項編集",
+      "description": "契約書の既存の条項を編集する。",
+      "input": "編集する条項の内容",
+      "output": "編集された条項の契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-014",
+      "category": "契約書管理",
+      "function_name": "Markdown契約書表示",
+      "description": "保存されたMarkdown形式の契約書を表示する。",
+      "input": "Markdown形式の契約書ファイル",
+      "output": "表示された契約書",
+      "user": "契約担当者, 法務担当者"
+    },
+    {
+      "id": "FUN-015",
+      "category": "契約書出力",
+      "function_name": "PDFプレビュー",
+      "description": "PDF出力前に契約書の内容をプレビュー表示する。",
+      "input": "生成された契約書",
+      "output": "PDFプレビュー画面",
+      "user": "契約担当者, 法務担当者"
+    },
+    {
+      "id": "FUN-016",
+      "category": "契約書管理",
+      "function_name": "契約書削除",
+      "description": "保存された契約書を削除する。",
+      "input": "削除する契約書",
+      "output": "削除された契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-017",
+      "category": "契約書作成",
+      "function_name": "契約書プレビュー",
+      "description": "自動生成された契約書をプレビュー表示する。",
+      "input": "自動生成された契約書",
+      "output": "プレビュー画面",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-018",
+      "category": "契約書作成",
+      "function_name": "契約書情報編集",
+      "description": "入力した契約書情報（名称、日付、金額など）を編集する。",
+      "input": "編集対象の契約書情報",
+      "output": "編集された契約書情報",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-019",
+      "category": "契約書作成",
+      "function_name": "条項番号リセット",
+      "description": "条項番号をリセットし、初期状態に戻す。",
+      "input": "なし",
+      "output": "リセットされた条項番号の契約書",
+      "user": "契約担当者"
+    },
+    {
+      "id": "FUN-020",
+      "category": "契約書管理",
+      "function_name": "契約書履歴管理",
+      "description": "契約書の変更履歴を管理する。",
+      "input": "なし",
+      "output": "契約書の変更履歴",
+      "user": "契約担当者, 法務担当者"
+    }
+  ]
+}

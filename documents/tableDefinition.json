@@ -1,0 +1,275 @@
+{
+  "key": "tableDefinition",
+  "value": [
+    {
+      "id": "TAB-001",
+      "table": "contract_templates",
+      "column": "id",
+      "dataType": "uuid",
+      "regulation": "primary key",
+      "defaultValue": "uuid_generate_v4()",
+      "foreignKey": null,
+      "description": "契約書テンプレートのID"
+    },
+    {
+      "id": "TAB-002",
+      "table": "contract_templates",
+      "column": "name",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約書テンプレートの名前"
+    },
+    {
+      "id": "TAB-003",
+      "table": "contract_templates",
+      "column": "content",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約書テンプレートの本文（Markdown形式）"
+    },
+    {
+      "id": "TAB-004",
+      "table": "contract_templates",
+      "column": "created_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "契約書テンプレートの作成日時"
+    },
+    {
+      "id": "TAB-005",
+      "table": "contract_templates",
+      "column": "updated_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "契約書テンプレートの更新日時"
+    },
+    {
+      "id": "TAB-006",
+      "table": "contracts",
+      "column": "id",
+      "dataType": "uuid",
+      "regulation": "primary key",
+      "defaultValue": "uuid_generate_v4()",
+      "foreignKey": null,
+      "description": "契約書のID"
+    },
+    {
+      "id": "TAB-007",
+      "table": "contracts",
+      "column": "template_id",
+      "dataType": "uuid",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": "contract_templates(id)",
+      "description": "使用された契約書テンプレートのID"
+    },
+    {
+      "id": "TAB-008",
+      "table": "contracts",
+      "column": "name",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約書の名称"
+    },
+    {
+      "id": "TAB-009",
+      "table": "contracts",
+      "column": "contract_date",
+      "dataType": "date",
+      "regulation": null,
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約日"
+    },
+    {
+      "id": "TAB-010",
+      "table": "contracts",
+      "column": "amount",
+      "dataType": "numeric",
+      "regulation": null,
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約金額"
+    },
+    {
+      "id": "TAB-011",
+      "table": "contracts",
+      "column": "content",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "契約書の内容（Markdown形式）"
+    },
+    {
+      "id": "TAB-012",
+      "table": "contracts",
+      "column": "pdf_path",
+      "dataType": "text",
+      "regulation": null,
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "PDFファイルへのパス"
+    },
+    {
+      "id": "TAB-013",
+      "table": "contracts",
+      "column": "created_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "契約書の作成日時"
+    },
+    {
+      "id": "TAB-014",
+      "table": "contracts",
+      "column": "updated_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "契約書の更新日時"
+    },
+    {
+      "id": "TAB-015",
+      "table": "contract_histories",
+      "column": "id",
+      "dataType": "uuid",
+      "regulation": "primary key",
+      "defaultValue": "uuid_generate_v4()",
+      "foreignKey": null,
+      "description": "契約書履歴ID"
+    },
+    {
+      "id": "TAB-016",
+      "table": "contract_histories",
+      "column": "contract_id",
+      "dataType": "uuid",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": "contracts(id)",
+      "description": "契約書ID"
+    },
+    {
+      "id": "TAB-017",
+      "table": "contract_histories",
+      "column": "content",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "変更履歴における契約書のコンテンツ(Markdown)"
+    },
+    {
+      "id": "TAB-018",
+      "table": "contract_histories",
+      "column": "changed_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "変更日時"
+    },
+    {
+      "id": "TAB-019",
+      "table": "users",
+      "column": "id",
+      "dataType": "uuid",
+      "regulation": "primary key",
+      "defaultValue": "uuid_generate_v4()",
+      "foreignKey": null,
+      "description": "ユーザーID"
+    },
+    {
+      "id": "TAB-020",
+      "table": "users",
+      "column": "name",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "ユーザー名"
+    },
+    {
+      "id": "TAB-021",
+      "table": "users",
+      "column": "role",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "ユーザーの役割(契約担当者/法務担当者)"
+    },
+    {
+      "id": "TAB-022",
+      "table": "contract_approvals",
+      "column": "id",
+      "dataType": "uuid",
+      "regulation": "primary key",
+      "defaultValue": "uuid_generate_v4()",
+      "foreignKey": null,
+      "description": "契約承認履歴のID"
+    },
+    {
+      "id": "TAB-023",
+      "table": "contract_approvals",
+      "column": "contract_id",
+      "dataType": "uuid",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": "contracts(id)",
+      "description": "契約書ID"
+    },
+    {
+      "id": "TAB-024",
+      "table": "contract_approvals",
+      "column": "user_id",
+      "dataType": "uuid",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": "users(id)",
+      "description": "承認者のユーザーID"
+    },
+    {
+      "id": "TAB-025",
+      "table": "contract_approvals",
+      "column": "status",
+      "dataType": "text",
+      "regulation": "not null",
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "承認状況（承認/否認）"
+    },
+    {
+      "id": "TAB-026",
+      "table": "contract_approvals",
+      "column": "comment",
+      "dataType": "text",
+      "regulation": null,
+      "defaultValue": null,
+      "foreignKey": null,
+      "description": "承認コメント"
+    },
+    {
+      "id": "TAB-027",
+      "table": "contract_approvals",
+      "column": "approved_at",
+      "dataType": "timestamp with time zone",
+      "regulation": "not null",
+      "defaultValue": "now()",
+      "foreignKey": null,
+      "description": "承認日時"
+    }
+  ]
+}

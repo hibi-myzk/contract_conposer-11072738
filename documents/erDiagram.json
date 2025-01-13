@@ -1,0 +1,6 @@
+{
+  "key": "erDiagram",
+  "value": {
+    "mermaid": "erDiagram\n    contract_templates {\n        uuid id PK\n        text name\n        text content\n        timestamp_tz created_at\n        timestamp_tz updated_at\n    }\n    contracts {\n        uuid id PK\n        uuid template_id FK\n        text name\n        date contract_date\n        numeric amount\n        text content\n        text pdf_path\n        timestamp_tz created_at\n        timestamp_tz updated_at\n    }\n    contract_histories {\n        uuid id PK\n        uuid contract_id FK\n        text content\n        timestamp_tz changed_at\n    }\n    users {\n        uuid id PK\n        text name\n        text role\n    }\n    contract_approvals {\n        uuid id PK\n        uuid contract_id FK\n        uuid user_id FK\n        text status\n        text comment\n        timestamp_tz approved_at\n    }\n    contract_templates ||--o{ contracts : creates\n    contracts ||--o{ contract_histories : has\n    contracts ||--o{ contract_approvals : requires\n    users ||--o{ contract_approvals : approves"
+  }
+}

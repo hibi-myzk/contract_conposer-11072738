@@ -1,0 +1,496 @@
+{
+  "key": "screensList",
+  "value": [
+    {
+      "id": "SCR-001",
+      "category": "認証",
+      "screenName": "ログイン画面",
+      "description": "システムにログインするための画面",
+      "Screen components": "ログインフォーム（ユーザーID、パスワード入力）、ログインボタン",
+      "operatingProcedure": "ユーザーIDとパスワードを入力し、ログインボタンをクリックする",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "guest",
+      "fileName": "login.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-001",
+          "category": "認証",
+          "handleName": "ログイン",
+          "description": "ユーザーの認証を行い、セッションを確立する。",
+          "handleProcedure": "ユーザーIDとパスワードを受け取り、データベースと照合して認証する。認証に成功したら、セッションを生成し、ユーザー情報を保持する。失敗した場合はエラーを返す。",
+          "fileName": "/api/auth/login.ts",
+          "relatedScreen": "SCR-001",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport Login from '@/pages/login';\nimport { jest } from '@jest/globals';\n\ndescribe('Login Component Test', () => {\n  // モック\n  const mockPush = jest.fn();\n\n  beforeEach(() => {\n    jest.clearAllMocks();\n    // next/router のモックを設定\n    global.mockNextRouter.push = mockPush;\n\n    // axios のモックを設定\n    global.axios.post.mockResolvedValue({ status: 200, data: { message: 'ログイン成功' } });\n  });\n\n  it('ログインフォームが表示されること', () => {\n    render(<Login />);\n    expect(screen.getByLabelText('ユーザーID')).toBeInTheDocument();\n    expect(screen.getByLabelText('パスワード')).toBeInTheDocument();\n    expect(screen.getByRole('button', { name: 'ログイン' })).toBeInTheDocument();\n  });\n\n  it('ログインボタンがクリックされた際にaxios.postが呼び出されること', async () => {\n    render(<Login />);\n    const userIdInput = screen.getByLabelText('ユーザーID');\n    const passwordInput = screen.getByLabelText('パスワード');\n    const loginButton = screen.getByRole('button', { name: 'ログイン' });\n\n    fireEvent.change(userIdInput, { target: { value: 'testuser' } });\n    fireEvent.change(passwordInput, { target: { value: 'password' } });\n    fireEvent.click(loginButton);\n\n    expect(global.axios.post).toHaveBeenCalledWith('/api/auth/login', { userId: 'testuser', password: 'password' });\n  });\n\n\n  it('ログイン成功時に指定のページに遷移すること', async () => {\n    render(<Login />);\n    const userIdInput = screen.getByLabelText('ユーザーID');\n    const passwordInput = screen.getByLabelText('パスワード');\n    const loginButton = screen.getByRole('button', { name: 'ログイン' });\n\n    fireEvent.change(userIdInput, { target: { value: 'testuser' } });\n    fireEvent.change(passwordInput, { target: { value:: 'password' } });\n    fireEvent.click(loginButton);\n\n    await global.axios.post;\n    expect(mockPush).toHaveBeenCalledWith('/dashboard');\n  });\n\n});\n\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-002",
+      "category": "契約書管理",
+      "screenName": "契約書一覧画面",
+      "description": "登録済みの契約書を一覧表示する画面",
+      "Screen components": "契約書一覧テーブル、検索フォーム、契約書登録ボタン",
+      "operatingProcedure": "契約書一覧を閲覧し、必要に応じて契約書を検索する。新規契約書を作成する場合は登録ボタンをクリックする",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/index.tsx",
+      "getData": "[{\"table\":\"contracts\",\"items\":[\"id\",\"name\",\"contract_date\",\"updated_at\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-005",
+          "category": "契約書",
+          "handleName": "契約書一覧取得",
+          "description": "登録されている契約書の一覧を取得する。",
+          "handleProcedure": "データベースから契約書の一覧を取得する。id、名称、契約日、更新日を返す。",
+          "fileName": "/api/contracts/index.ts",
+          "relatedScreen": "SCR-002",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, act } from '@testing-library/react';\nimport ContractList from '@/pages/contracts/index';\nimport { jest } from '@jest/globals';\n\n// モック\njest.mock('axios');\nconst mockedAxios = axios as jest.Mocked<typeof axios>;\n\nconst mockRouter = {\n  push: jest.fn(),\n};\njest.mock('next/navigation', () => ({\n  useRouter: () => mockRouter,\n}));\n\ndescribe('契約書一覧画面', () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n\n  it('契約書一覧が表示される', async () => {\n    // モックデータ\n    const contracts = [\n      { id: '1', name: '契約書1', contract_date: '2024-01-01', updated_at: '2024-01-01' },\n      { id: '2', name: '契約書2', contract_date: '2024-01-02', updated_at: '2024-01-02' },\n    ];\n\n    mockedAxios.get.mockResolvedValue({ data: contracts });\n\n    render(<ContractList />);\n\n    // 契約書名が表示されることを確認\n    await act(async() => { await expect(screen.findByText('契約書1')).resolves.toBeVisible(); });\n    await act(async() => { await expect(screen.findByText('契約書2')).resolves.toBeVisible(); });\n    \n  });\n\n  it('契約書登録ボタンがクリックできる', async () => {\n    render(<ContractList />);\n    // ボタンをクリック\n    await act(async() => { await screen.getByRole('button', { name: '契約書登録' }).click();});\n    // ページ遷移\n    expect(mockRouter.push).toHaveBeenCalledWith('/contracts/new');\n  });\n\n});\n\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-003",
+      "category": "契約書作成",
+      "screenName": "テンプレート選択画面",
+      "description": "契約書作成に使用するテンプレートを選択する画面",
+      "Screen components": "テンプレート一覧リスト、選択ボタン",
+      "operatingProcedure": "利用する契約書テンプレートを選択する",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/templates.tsx",
+      "getData": "[{\"table\":\"contract_templates\",\"items\":[\"id\",\"name\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-003",
+          "category": "契約書テンプレート",
+          "handleName": "基本契約書一覧取得",
+          "description": "登録されている基本契約書テンプレートの一覧を取得する。",
+          "handleProcedure": "データベースから契約書テンプレートの一覧を取得する。idと名称を返す。",
+          "fileName": "/api/contract-templates/index.ts",
+          "relatedScreen": "SCR-003",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport { jest } from '@jest/globals';\nimport axios from 'axios';\nimport Templates from '@/pages/contracts/templates';\nimport Header from '@/components/common/Header';\nimport Footer from '@/components/common/Footer';\n\njest.mock('axios');\njest.mock('next/navigation', () => ({\n  useRouter: jest.fn(),\n}));\n\n// Axios のモック\nconst mockedAxios = axios as jest.Mocked<typeof axios>;\nglobal.axios = mockedAxios;\n\ndescribe('Templates Component', () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n    mockedAxios.get.mockResolvedValue({\n      data: [\n        { id: '1', name: 'テンプレート1' },\n        { id: '2', name: 'テンプレート2' },\n      ],\n      status: 200,\n      statusText: 'OK',\n    });\n  });\n\n  it('renders Header and Footer components', () => {\n    render(<Templates />);\n    expect(screen.getByRole('heading', { name: '契約書作成システム' })).toBeInTheDocument(); // Header\n    expect(screen.getByText(/© 2024 契約書作成システム/i)).toBeInTheDocument(); // Footer\n  });\n\n  it('fetches and displays contract templates', async () => {\n    render(<Templates />);\n    expect(mockedAxios.get).toHaveBeenCalledWith('/api/contract-templates');\n    expect(await screen.findByText('テンプレート1')).toBeInTheDocument();\n    expect(await screen.findByText('テンプレート2')).toBeInTheDocument();\n  });\n\n  it('handles API errors', async () => {\n    const errorMessage = 'テンプレートの取得に失敗しました。';\n    mockedAxios.get.mockRejectedValue(new Error('API Error'));\n    render(<Templates />);\n    expect(await screen.findByText(errorMessage)).toBeInTheDocument();\n  });\n\n  it('navigates to the contract input screen when a template is selected', async () => {\n    const mockRouter = jest.fn();\n    (useRouter as jest.Mock).mockReturnValue({\n      push: mockRouter,\n    });\n\n    render(<Templates />);\n    await screen.findByText('テンプレート1');\n    fireEvent.click(screen.getByText('テンプレート1'));\n    expect(mockRouter).toHaveBeenCalledWith('/contracts/new?templateId=1');\n  });\n});\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-004",
+      "category": "契約書作成",
+      "screenName": "契約書情報入力画面",
+      "description": "契約書に必要な情報を入力する画面",
+      "Screen components": "契約書情報入力フォーム（名称、日付、金額など）、プレビューボタン",
+      "operatingProcedure": "契約書名、契約日、金額などを入力し、プレビューボタンを押して確認する",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/input.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-005",
+      "category": "契約書作成",
+      "screenName": "契約書プレビュー画面",
+      "description": "入力された情報で生成された契約書をプレビュー表示する画面",
+      "Screen components": "契約書プレビュー表示領域、条項一覧ボタン、確定ボタン",
+      "operatingProcedure": "生成された契約書の内容を確認し、条項の編集が必要な場合は条項一覧ボタンをクリックする。問題なければ確定ボタンを押す",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/preview.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-006",
+      "category": "契約書作成",
+      "screenName": "条項一覧画面",
+      "description": "契約書の条項を一覧表示し、編集や追加を行う画面",
+      "Screen components": "条項一覧テーブル、追加ボタン、編集ボタン",
+      "operatingProcedure": "条項一覧を確認し、必要に応じて条項を追加、編集、削除する",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/clauses.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-007",
+      "category": "契約書作成",
+      "screenName": "条項編集画面",
+      "description": "契約書の条項を編集する画面",
+      "Screen components": "条項編集フォーム、保存ボタン",
+      "operatingProcedure": "編集する条項の内容を修正し、保存ボタンを押す",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/clauses/[id]/edit.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-008",
+      "category": "契約書作成",
+      "screenName": "契約書確定画面",
+      "description": "作成した契約書を確定する画面",
+      "Screen components": "契約書確定ボタン、PDF出力ボタン",
+      "operatingProcedure": "契約書の内容を確認後、確定ボタンをクリックする。PDFで出力する場合はPDF出力ボタンをクリックする",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/confirm.tsx",
+      "getData": "null",
+      "postData": "[{\"table\":\"contracts\",\"items\":[\"template_id\",\"name\",\"contract_date\",\"amount\",\"content\",\"pdf_path\"]}]",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-004",
+          "category": "契約書",
+          "handleName": "契約書作成",
+          "description": "契約書を作成し、データベースに保存する。",
+          "handleProcedure": "契約書情報（テンプレートID、名称、契約日、金額、内容）を受け取り、契約書をデータベースに保存する。PDFファイルを生成し、そのパスも保存する。",
+          "fileName": "/api/contracts/create.ts",
+          "relatedScreen": "SCR-008",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport ContractConfirm from '@/pages/contracts/confirm';\nimport { jest } from '@jest/globals';\n\n// ヘッダーコンポーネントのモック\njest.mock('@/components/Header', () => () => <div>ヘッダー</div>);\n\n// フッターコンポーネントのモック\njest.mock('@/components/Footer', () => () => <div>フッター</div>);\n\ndescribe('契約書確定画面', () => {\n  test('契約書確定ボタンのテスト', async () => {\n    render(<ContractConfirm />);  \n    const 確定ボタン = await screen.findByRole('button', { name: /確定/i });\n    expect(確定ボタン).toBeInTheDocument();\n    fireEvent.click(確定ボタン);\n  });\n\n  test('PDF出力ボタンのテスト', async () => {\n    render(<ContractConfirm />);\n    const PDF出力ボタン = await screen.findByRole('button', { name: /PDF出力/i });\n    expect(PDF出力ボタン).toBeInTheDocument();\n    fireEvent.click(PDF出力ボタン);\n  });\n\n  test('ヘッダーとフッターが表示される', async () => {\n    render(<ContractConfirm />);\n    expect(screen.getByText('ヘッダー')).toBeInTheDocument();\n    expect(screen.getByText('フッター')).toBeInTheDocument();\n  });\n});\"}"
+        },
+        {
+          "id": "BAC-011",
+          "category": "契約書",
+          "handleName": "契約書PDF生成",
+          "description": "契約書のPDFファイルを生成する。",
+          "handleProcedure": "契約書IDを受け取り、データベースから契約書情報を取得し、PDFファイルを生成し、そのパスを返す。",
+          "fileName": "/api/contracts/[id]/pdf.ts",
+          "relatedScreen": "SCR-008",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport ContractConfirm from '@/pages/contracts/confirm';\nimport { jest } from '@jest/globals';\n\n// ヘッダーコンポーネントのモック\njest.mock('@/components/Header', () => () => <div>ヘッダー</div>);\n\n// フッターコンポーネントのモック\njest.mock('@/components/Footer', () => () => <div>フッター</div>);\n\ndescribe('契約書確定画面', () => {\n  test('契約書確定ボタンのテスト', async () => {\n    render(<ContractConfirm />);  \n    const 確定ボタン = await screen.findByRole('button', { name: /確定/i });\n    expect(確定ボタン).toBeInTheDocument();\n    fireEvent.click(確定ボタン);\n  });\n\n  test('PDF出力ボタンのテスト', async () => {\n    render(<ContractConfirm />);\n    const PDF出力ボタン = await screen.findByRole('button', { name: /PDF出力/i });\n    expect(PDF出力ボタン).toBeInTheDocument();\n    fireEvent.click(PDF出力ボタン);\n  });\n\n  test('ヘッダーとフッターが表示される', async () => {\n    render(<ContractConfirm />);\n    expect(screen.getByText('ヘッダー')).toBeInTheDocument();\n    expect(screen.getByText('フッター')).toBeInTheDocument();\n  });\n});\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-009",
+      "category": "契約書作成",
+      "screenName": "条項追加画面",
+      "description": "契約書に条項を追加する画面",
+      "Screen components": "条項入力フォーム、追加ボタン",
+      "operatingProcedure": "追加する条項の内容を入力し、追加ボタンをクリックする",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/clauses/add.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-010",
+      "category": "契約書作成",
+      "screenName": "テンプレート登録画面",
+      "description": "契約書テンプレートを登録する画面",
+      "Screen components": "テンプレート登録フォーム(名称、内容)、登録ボタン",
+      "operatingProcedure": "契約書テンプレートの名称と内容を入力し、登録ボタンをクリックする",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/templates/regist.tsx",
+      "getData": "null",
+      "postData": "[{\"table\":\"contract_templates\",\"items\":[\"name\",\"content\"]}]",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-002",
+          "category": "契約書テンプレート",
+          "handleName": "基本契約書登録",
+          "description": "基本となる契約書のテンプレートをデータベースに登録する。",
+          "handleProcedure": "契約書テンプレート（名称、内容）を受け取り、データベースに保存する。",
+          "fileName": "/api/contract-templates/create.ts",
+          "relatedScreen": "SCR-010",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport Regist from '@/pages/contracts/templates/regist';\nimport Header from '@/components/common/Header';\nimport Footer from '@/components/common/Footer';\n\njest.mock('axios');\njest.mock('next/navigation', () => ({\n  useRouter: jest.fn(() => ({\n    push: jest.fn(),\n  })),\n}));\n\ndescribe('テンプレート登録画面', () => {\n  it('HeaderとFooterが表示されること', () => {\n    render(<Regist />);\n    expect(screen.getByRole('banner')).toBeTruthy(); // Headerのテスト\n    expect(screen.getByRole('contentinfo')).toBeTruthy(); // Footerのテスト\n  });\n\n  it('テンプレート名と内容を入力し、登録ボタンをクリックするとAPIがコールされること', async () => {\n    const mockAxios = jest.mocked(axios);\n    mockAxios.post.mockResolvedValue({ status: 200 });\n\n    render(<Regist />);\n\n    const nameInput = screen.getByLabelText('テンプレート名');\n    const contentInput = screen.getByLabelText('内容');\n    const registButton = screen.getByRole('button', { name: '登録' });\n\n    fireEvent.change(nameInput, { target: { value: 'テストテンプレート' } });\n    fireEvent.change(contentInput, { target: { value: 'テスト内容' } });\n    fireEvent.click(registButton);\n\n    expect(mockAxios.post).toHaveBeenCalledWith('/api/contract-templates/create', {\n      name: 'テストテンプレート',\n      content: 'テスト内容',\n    });\n  });\n\n\n  it('APIコールが成功した場合、契約書一覧画面に遷移すること', async () => {\n    const mockAxios = jest.mocked(axios);\n    mockAxios.post.mockResolvedValue({ status: 200 });\n    const mockRouterPush = jest.fn();\n    jest.mocked(useRouter).mockReturnValue({\n        push: mockRouterPush\n    })\n\n    render(<Regist />);\n\n    const nameInput = screen.getByLabelText('テンプレート名');\n    const contentInput = screen.getByLabelText('内容');\n    const registButton = screen.getByRole('button', { name: '登録' });\n\n    fireEvent.change(nameInput, { target: { value: 'テストテンプレート' } });\n    fireEvent.change(contentInput, { target: { value: 'テスト内容' } });\n    fireEvent.click(registButton);\n\n    await new Promise((resolve) => setTimeout(resolve, 0)); // 非同期処理の完了を待つ\n\n    expect(mockRouterPush).toHaveBeenCalledWith('/contracts');\n  });\n});\n\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-011",
+      "category": "契約書作成",
+      "screenName": "契約書情報編集画面",
+      "description": "契約書情報を編集する画面",
+      "Screen components": "契約書情報編集フォーム（名称、日付、金額など）、保存ボタン",
+      "operatingProcedure": "編集する契約書名、契約日、金額などを修正し、保存ボタンを押す",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/edit.tsx",
+      "getData": "null",
+      "postData": "[{\"table\":\"contracts\",\"items\":[\"name\",\"contract_date\",\"amount\"]}]",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-012",
+      "category": "契約書管理",
+      "screenName": "契約書詳細画面",
+      "description": "契約書の詳細情報を表示する画面",
+      "Screen components": "契約書情報表示領域、編集ボタン、削除ボタン、履歴ボタン",
+      "operatingProcedure": "契約書情報を確認する。編集、削除、履歴確認は各ボタンで行う",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id].tsx",
+      "getData": "[{\"table\":\"contracts\",\"items\":[\"id\",\"template_id\",\"name\",\"contract_date\",\"amount\",\"content\",\"pdf_path\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-006",
+          "category": "契約書",
+          "handleName": "契約書詳細取得",
+          "description": "指定されたIDの契約書詳細情報を取得する。",
+          "handleProcedure": "契約書IDを受け取り、データベースから契約書詳細情報を取得する。",
+          "fileName": "/api/contracts/[id].ts",
+          "relatedScreen": "SCR-012",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport Contracts from '@/pages/contracts/[id]';\n\n// モック\njest.mock('axios');\nconst mockedAxios = axios as jest.Mocked<typeof axios>;\n\n// ヘッダーコンポーネント（モック）\nconst Header = () => <div>ヘッダー</div>;\n// フッターコンポーネント（モック）\nconst Footer = () => <div>フッター</div>;\n\ndescribe('契約書詳細画面', () => {\n  const contractData = {\n    id: '1',\n    template_id: '1',\n    name: 'テスト契約書',\n    contract_date: '2024-07-24',\n    amount: '10000',\n    content: '# テスト契約書\\\n契約内容の詳細',\n    pdf_path: '/path/to/pdf',\n  };\n\n  beforeEach(() => {\n    mockedAxios.get.mockResolvedValue({ data: contractData });\n  });\n\n  it('契約書情報が正しく表示される', async () => {\n    render(<Contracts params={{ id: '1' }} />); // params を渡す\n    await act(() => Promise.resolve()); // 非同期処理を待つ\n\n    expect(screen.getByText('テスト契約書')).toBeInTheDocument();\n    expect(screen.getByText('2024-07-24')).toBeInTheDocument();\n    expect(screen.getByText('10000')).toBeInTheDocument();\n    expect(screen.getByText('# テスト契約書\\\n契約内容の詳細')).toBeInTheDocument(); // Markdown形式\n    expect(screen.getByRole('heading', { level: 1, name: 'テスト契約書' })).toBeVisible();\n  });\n\n  it('ヘッダーとフッターが表示される', async () => {\n    render(<Contracts params={{ id: '1' }} />);\n    await act(() => Promise.resolve());\n\n    expect(screen.getByText('ヘッダー')).toBeInTheDocument();\n    expect(screen.getByText('フッター')).toBeInTheDocument();\n  });\n\n  it('データ取得エラー時にエラーメッセージが表示される', async () => {\n    mockedAxios.get.mockRejectedValue(new Error('エラーメッセージ'));\n    render(<Contracts params={{ id: '1' }} />);\n    await act(() => Promise.resolve());\n\n    expect(screen.getByText('エラーが発生しました: エラーメッセージ')).toBeInTheDocument();\n  });\n});\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-013",
+      "category": "契約書管理",
+      "screenName": "契約書検索画面",
+      "description": "契約書を検索する画面",
+      "Screen components": "検索フォーム（契約書名、日付など）、検索ボタン、検索結果一覧",
+      "operatingProcedure": "検索条件を入力し、検索ボタンをクリックする",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/search.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-009",
+          "category": "契約書",
+          "handleName": "契約書検索",
+          "description": "契約書を検索条件に基づき検索する。",
+          "handleProcedure": "検索条件（契約書名、日付など）を受け取り、データベースを検索し、条件に合致する契約書の一覧を返す。",
+          "fileName": "/api/contracts/search.ts",
+          "relatedScreen": "SCR-013",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent, act } from '@testing-library/react';\nimport { useForm } from 'react-hook-form';\nimport { useRouter } from 'next/navigation';\nimport ContractSearch from '@/pages/contracts/search';\n\njest.mock('next/navigation');\n\n// モックコンポーネント\nconst Header = () => <div>Header</div>;\nconst Footer = () => <div>Footer</div>;\n\nconst mockUseRouter = jest.mocked(useRouter, true);\n\nbeforeEach(() => {\n  mockUseRouter.mockReturnValue({\n    push: jest.fn(),\n  });\n});\n\ndescribe('ContractSearch Component', () => {\n  it('renders without crashing', () => {\n    render(\n      <ContractSearch />\n    );\n\n    expect(screen.getByText('契約書検索画面')).toBeInTheDocument();\n  });\n\n  it('updates search form values', async () => {\n    render(\n      <ContractSearch />\n    );\n\n    const contractNameInput = screen.getByLabelText('契約書名');\n    const startDateInput = screen.getByLabelText('開始日');\n\n    fireEvent.change(contractNameInput, { target: { value: 'テスト契約書' } });\n    fireEvent.change(startDateInput, { target: { value: '2024-01-01' } });\n\n    expect(contractNameInput.value).toBe('テスト契約書');\n    expect(startDateInput.value).toBe('2024-01-01');\n  });\n\n  it('submits the search form', async () => {\n    const mockPush = jest.fn();\n    mockUseRouter.mockReturnValue({\n      push: mockPush,\n    });\n\n    render(\n      <ContractSearch />\n    );\n\n    const searchButton = screen.getByRole('button', { name: '検索' });\n    fireEvent.click(searchButton);\n\n    // 検索処理の追加実装時に適切なテストを追加\n  });\n\n  it('displays common components', () => {\n    render(<ContractSearch />); \n    expect(screen.getByText('Header')).toBeInTheDocument();\n    expect(screen.getByText('Footer')).toBeInTheDocument();\n  });\n\n});\n\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-014",
+      "category": "契約書管理",
+      "screenName": "契約書履歴画面",
+      "description": "契約書の変更履歴を表示する画面",
+      "Screen components": "履歴一覧テーブル",
+      "operatingProcedure": "契約書の変更履歴を確認する",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/history.tsx",
+      "getData": "[{\"table\":\"contract_histories\",\"items\":[\"changed_at\",\"content\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-010",
+          "category": "契約書",
+          "handleName": "契約書履歴取得",
+          "description": "契約書の変更履歴を取得する。",
+          "handleProcedure": "契約書IDを受け取り、データベースから該当契約書の変更履歴を取得する。",
+          "fileName": "/api/contracts/[id]/history.ts",
+          "relatedScreen": "SCR-014",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport History from '@/pages/contracts/[id]/history';\n\n// モックデータ\nconst mockHistoryData = [\n  { changed_at: '2024-07-24T10:00:00Z', content: '契約内容A' },\n  { changed_at: '2024-07-25T10:00:00Z', content: '契約内容B' },\n];\n\n// コンポーネント\nconst Header = () => <header>ヘッダー</header>;\nconst Footer = () => <footer>フッター</footer>;\n\n// モック\njest.mock('axios');\nconst mockedAxios = jest.mocked(axios);\n\n// テスト\ndescribe('契約書履歴画面', () => {\n  beforeEach(() => {\n    mockedAxios.get.mockResolvedValue({ data: mockHistoryData });\n  });\n\n  it('履歴データが正しく表示される', async () => {\n    render(\n      <History\n        params={{\n          id: 1,\n        }}\n      >\n        <Header />\n        <Footer />\n      </History>\n    );\n\n    await act(async () => {\n      // 非同期処理が完了するまで待機\n    });\n    mockHistoryData.forEach((history) => {\n      expect(screen.getByText(history.content)).toBeInTheDocument();\n    });\n  });\n\n  it('Header コンポーネントが表示される', async () => {\n    render(\n        <History\n          params={{\n            id: 1,\n          }}\n        >\n          <Header />\n          <Footer />\n        </History>\n    );\n    await act(async () => {\n      // 非同期処理が完了するまで待機\n    });\n    expect(screen.getByText('ヘッダー')).toBeInTheDocument();\n  });\n\n  it('Footer コンポーネントが表示される', async () => {\n    render(\n        <History\n          params={{\n            id: 1,\n          }}\n        >\n          <Header />\n          <Footer />\n        </History>\n    );\n    await act(async () => {\n      // 非同期処理が完了するまで待機\n    });\n    expect(screen.getByText('フッター')).toBeInTheDocument();\n  });\n\n  it('データ取得エラー時にエラーメッセージが表示される', async () => {\n    mockedAxios.get.mockRejectedValue(new Error('データ取得エラー'));\n\n    render(\n        <History\n          params={{\n            id: 1,\n          }}\n        >\n          <Header />\n          <Footer />\n        </History>\n    );\n    await act(async () => {\n      // 非同期処理が完了するまで待機\n    });\n    expect(screen.getByText('データの取得に失敗しました。')).toBeInTheDocument();\n  });\n});\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-015",
+      "category": "契約書管理",
+      "screenName": "Markdown契約書表示画面",
+      "description": "Markdown形式で保存された契約書を表示する画面",
+      "Screen components": "Markdown表示領域",
+      "operatingProcedure": "Markdown形式の契約書の内容を確認する",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/markdown.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-016",
+      "category": "契約書出力",
+      "screenName": "PDFプレビュー画面",
+      "description": "PDF出力前に契約書の内容をプレビュー表示する画面",
+      "Screen components": "PDFプレビュー表示領域",
+      "operatingProcedure": "PDFのプレビューを確認する",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/pdfpreview.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-017",
+      "category": "契約書管理",
+      "screenName": "検索結果一覧画面",
+      "description": "契約書の検索結果を表示する画面。",
+      "Screen components": "検索結果一覧テーブル、詳細画面への遷移ボタン",
+      "operatingProcedure": "検索結果が表示され、詳細を確認したい契約書を選択する。",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/search/result.tsx",
+      "getData": "[{\"table\":\"contracts\", \"items\":[\"id\",\"name\",\"contract_date\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\", \"SideMenu.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-018",
+      "category": "契約書管理",
+      "screenName": "変更履歴画面",
+      "description": "契約書の変更履歴を表示する画面。",
+      "Screen components": "変更履歴一覧テーブル（変更日時、変更内容）",
+      "operatingProcedure": "契約書の変更履歴が表示される。",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/history.tsx",
+      "getData": "[{\"table\":\"contract_histories\", \"items\":[\"changed_at\",\"content\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\", \"SideMenu.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-019",
+      "category": "契約書管理",
+      "screenName": "契約書削除確認画面",
+      "description": "契約書を削除する際の確認画面",
+      "Screen components": "削除確認メッセージ、キャンセルボタン、削除ボタン",
+      "operatingProcedure": "削除確認メッセージが表示され、削除またはキャンセルを選択する。",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/delete.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\", \"SideMenu.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-020",
+      "category": "契約書管理",
+      "screenName": "Markdown表示画面",
+      "description": "契約書をMarkdown形式で表示する画面。",
+      "Screen components": "Markdown表示エリア",
+      "operatingProcedure": "契約書のMarkdown形式の内容が表示される。",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/[id]/markdown.tsx",
+      "getData": "[{\"table\":\"contracts\", \"items\":[\"content\"]}]",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\", \"SideMenu.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-012",
+          "category": "契約書",
+          "handleName": "契約書Markdown取得",
+          "description": "契約書のMarkdown形式のコンテンツを取得する。",
+          "handleProcedure": "契約書IDを受け取り、データベースから該当契約書のMarkdown形式の内容を取得する。",
+          "fileName": "/api/contracts/[id]/markdown.ts",
+          "relatedScreen": "SCR-020",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, act } from '@testing-library/react';\nimport '@testing-library/jest-dom';\nimport { useRouter } from 'next/navigation';\nimport MarkdownView from '@/pages/contracts/[id]/markdown';\n\njest.mock('next/navigation');\n\n// モックデータ\nconst markdownContent = '# 契約書タイトル\\\n## 第1条（目的）\\\nこの契約書の目的は...';\n\n// ヘッダーコンポーネント（モック）\nconst Header = () => <div>ヘッダー</div>;\n\n// サイドメニューコンポーネント（モック）\nconst SideMenu = () => <div>サイドメニュー</div>;\n\ndescribe('MarkdownView', () => {\n  beforeEach(() => {\n    (useRouter as jest.Mock).mockReturnValue({\n      push: jest.fn(),\n    });\n\n    // Axios のモック設定\n    jest.spyOn(global, 'fetch').mockResolvedValue({\n      json: async () => ({ content: markdownContent }),\n      ok: true,\n    } as Response);\n  });\n\n  it('契約書のMarkdown内容が正しく表示される', async () => {\n    render(\n      <div>\n        <Header />\n        <SideMenu />\n        <MarkdownView />\n      </div>\n    );\n\n    // Markdownコンテントが画面に表示されるまで待機\n    await act(async () => {\n      expect(await screen.findByText('契約書タイトル')).toBeInTheDocument();\n    });\n\n    // 正しいMarkdown内容が表示されていることを確認\n    expect(screen.getByRole('heading', { level: 1, name: '契約書タイトル' })).toBeInTheDocument();\n    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('第1条（目的）');\n    expect(screen.getByText('この契約書の目的は...')).toBeInTheDocument();\n  });\n\n  it('API取得エラー時の処理', async () => {\n    // fetchをエラーにする\n    jest.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('APIエラー'));\n\n    render(\n      <div>\n        <Header />\n        <SideMenu />\n        <MarkdownView />\n      </div>\n    );\n\n    // エラーメッセージが表示されるまで待機\n    await act(async () => {\n      // エラーメッセージが表示されることを期待する\n      // 例: expect(await screen.findByText('エラーが発生しました')).toBeInTheDocument();\n    });\n\n  });\n\n  describe('idがない場合のテスト', () => {\n    it('idがない場合、/contracts/ にリダイレクトされる', async () => {\n      (useRouter as jest.Mock).mockReturnValue({\n        push: jest.fn(),\n      });\n\n      render(\n        <div>\n          <Header />\n          <SideMenu />\n          <MarkdownView />\n        </div>\n      );\n      await act(async () => {});\n      expect(useRouter().push).toHaveBeenCalledWith('/contracts/');\n    });\n  });\n});\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-021",
+      "category": "契約書作成",
+      "screenName": "契約書作成画面",
+      "description": "契約書を作成するための画面。",
+      "Screen components": "契約書テンプレート選択フォーム、契約書情報入力フォーム（名称、日付、金額など）、条項一覧、プレビューボタン、保存ボタン",
+      "operatingProcedure": "契約書テンプレートを選択し、契約書情報を入力する。条項の追加、編集、削除も可能。プレビューを確認し、保存する。",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "contracts/create.tsx",
+      "getData": "[{\"table\":\"contract_templates\", \"items\":[\"id\",\"name\"]}]",
+      "postData": "[{\"table\":\"contracts\", \"items\":[\"template_id\", \"name\", \"contract_date\",\"amount\",\"content\"]}]",
+      "commonComponent": "[\"Header.tsx\", \"SideMenu.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-022",
+      "category": "契約書出力",
+      "screenName": "PDF出力完了画面",
+      "description": "契約書のPDF出力が完了したことを表示する画面",
+      "Screen components": "完了メッセージ, 契約書一覧へボタン, 契約書詳細へボタン",
+      "operatingProcedure": "PDF出力完了メッセージを確認する。契約書一覧へボタンで契約書一覧画面へ遷移する。契約書詳細へボタンで契約書詳細画面へ遷移する。",
+      "user": "契約担当者, 法務担当者",
+      "accessRight": "loged-in user",
+      "fileName": "/contracts/[id]/complete.tsx",
+      "getData": "null",
+      "postData": "null",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": []
+    },
+    {
+      "id": "SCR-023",
+      "category": "契約書管理",
+      "screenName": "契約書編集画面",
+      "description": "契約書の情報を編集する画面",
+      "Screen components": "契約書情報編集フォーム, 保存ボタン, キャンセルボタン",
+      "operatingProcedure": "契約書情報を編集する。保存ボタンで編集内容を保存する。キャンセルボタンで編集をキャンセルする。",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "/contracts/[id]/edit.tsx",
+      "getData": "[{\"table\":\"contracts\", \"items\":[\"id\",\"template_id\",\"name\",\"contract_date\",\"amount\",\"content\"]}]",
+      "postData": "[{\"table\":\"contracts\", \"items\":[\"name\",\"contract_date\",\"amount\",\"content\"]}]",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-007",
+          "category": "契約書",
+          "handleName": "契約書更新",
+          "description": "指定されたIDの契約書情報を更新する。",
+          "handleProcedure": "契約書IDと更新データ（名称、契約日、金額、内容）を受け取り、データベースの契約書情報を更新する。",
+          "fileName": "/api/contracts/[id]/edit.ts",
+          "relatedScreen": "SCR-023",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent, act } from '@testing-library/react';\nimport ContractEdit from '@/pages/contracts/[id]/edit';\nimport { jest } from '@jest/globals';\n\n// モック\njest.mock('next/navigation', () => ({\n  useRouter: jest.fn(() => mockRouter),\n}));\n\nconst mockRouter = {\n  push: jest.fn(),\n};\n\njest.mock('axios');\n\n// ヘッダーコンポーネント（モック）\njest.mock('@/components/Header', () => () => <div>ヘッダー</div>);\n\n// フッターコンポーネント（モック）\njest.mock('@/components/Footer', () => () => <div>フッター</div>);\n\ndescribe('ContractEdit Component Test', () => {\n  beforeEach(() => {\n    jest.clearAllMocks();\n  });\n\n  it('契約書編集画面のレンダリング', async () => {\n    render(<ContractEdit params={{ id: '1' }} />); // params を渡す\n    expect(screen.getByText('ヘッダー')).toBeInTheDocument();\n    expect(screen.getByText('フッター')).toBeInTheDocument();\n    // 必要な要素の有無を確認\n    expect(screen.getByRole('textbox', { name: /契約名/i })).toBeInTheDocument();\n    expect(screen.getByRole('textbox', { name: /契約日/i })).toBeInTheDocument();\n    expect(screen.getByRole('textbox', { name: /金額/i })).toBeInTheDocument();\n    expect(screen.getByRole('textbox', { name: /内容/i })).toBeInTheDocument();\n    expect(screen.getByRole('button', { name: /保存/i })).toBeInTheDocument();\n    expect(screen.getByRole('button', { name: /キャンセル/i })).toBeInTheDocument();\n  });\n\n  it('入力値の変更', async () => {\n    render(<ContractEdit params={{ id: '1' }} />);\n\n    const nameInput = screen.getByRole('textbox', { name: /契約名/i });\n    const dateInput = screen.getByRole('textbox', { name: /契約日/i });\n    const amountInput = screen.getByRole('textbox', { name: /金額/i });\n    const contentInput = screen.getByRole('textbox', { name: /内容/i });\n\n    fireEvent.change(nameInput, { target: { value: 'テスト契約' } });\n    fireEvent.change(dateInput, { target: { value: '2024-01-01' } });\n    fireEvent.change(amountInput, { target: { value: '10000' } });\n    fireEvent.change(contentInput, { target: { value: 'テスト内容' } });\n\n    expect(nameInput.value).toBe('テスト契約');\n    expect(dateInput.value).toBe('2024-01-01');\n    expect(amountInput.value).toBe('10000');\n    expect(contentInput.value).toBe('テスト内容');\n  });\n\n  it('保存ボタンのクリック', async () => {\n    render(<ContractEdit params={{ id: '1' }} />);\n    const saveButton = screen.getByRole('button', { name: /保存/i });\n    fireEvent.click(saveButton);\n\n    // 保存処理の確認\n  });\n\n  it('キャンセルボタンのクリック', async () => {\n    render(<ContractEdit params={{ id: '1' }} />);\n    const cancelButton = screen.getByRole('button', { name: /キャンセル/i });\n    fireEvent.click(cancelButton);\n\n    expect(mockRouter.push).toHaveBeenCalledWith('/contracts');\n  });\n});\n\"}"
+        }
+      ]
+    },
+    {
+      "id": "SCR-024",
+      "category": "契約書管理",
+      "screenName": "契約書削除画面",
+      "description": "保存された契約書を削除する画面",
+      "Screen components": "削除確認メッセージ, 削除ボタン, キャンセルボタン",
+      "operatingProcedure": "削除確認メッセージを確認する。削除ボタンで契約書を削除する。キャンセルボタンで削除をキャンセルする。",
+      "user": "契約担当者",
+      "accessRight": "loged-in user",
+      "fileName": "/contracts/[id]/delete.tsx",
+      "getData": "null",
+      "postData": "[{\"table\":\"contracts\", \"items\":[\"id\"]}]",
+      "commonComponent": "[\"Header.tsx\",\"Footer.tsx\"]",
+      "relatedBackendHandles": [
+        {
+          "id": "BAC-008",
+          "category": "契約書",
+          "handleName": "契約書削除",
+          "description": "指定されたIDの契約書を削除する。",
+          "handleProcedure": "契約書IDを受け取り、データベースから契約書を削除する。",
+          "fileName": "/api/contracts/[id]/delete.ts",
+          "relatedScreen": "SCR-024",
+          "relatedFrontendCode": "{\"code\": \"import { render, screen, fireEvent } from '@testing-library/react';\nimport { useRouter } from 'next/navigation';\nimport Delete from '@/pages/contracts/[id]/delete';\n\n// モック\njest.mock('next/navigation');\n\n// ヘッダーコンポーネント\nconst Header = () => <div>Header</div>;\n\n// フッターコンポーネント\nconst Footer = () => <div>Footer</div>;\n\ndescribe('契約書削除画面', () => {\n  const mockRouterPush = jest.fn();\n\n  beforeEach(() => {\n    (useRouter as jest.Mock).mockReturnValue({\n      push: mockRouterPush,\n    });\n  });\n\n  it('コンポーネントが正しくレンダリングされる', () => {\n    render(\n      <Delete />\n    );\n\n    // 削除確認メッセージが表示される\n    expect(screen.getByText('契約書を削除しますか？')).toBeInTheDocument();\n\n    // 削除ボタンが表示される\n    expect(screen.getByRole('button', { name: '削除' })).toBeInTheDocument();\n\n    // キャンセルボタンが表示される\n    expect(screen.getByRole('button', { name: 'キャンセル' })).toBeInTheDocument();\n\n        // ヘッダーが表示される\n    expect(screen.getByText('Header')).toBeInTheDocument();\n\n    // フッターが表示される\n    expect(screen.getByText('Footer')).toBeInTheDocument();\n  });\n\n  it('削除ボタンクリックでAPI呼び出しと画面遷移', async () => {\n    render(<Delete />);\n    const 削除ボタン = screen.getByRole('button', { name: '削除' });\n    fireEvent.click(削除ボタン);\n    expect(mockRouterPush).toHaveBeenCalledWith('/contracts');\n\n  });\n\n  it('キャンセルボタンクリックで画面遷移', () => {\n    render(<Delete />);\n    const キャンセルボタン = screen.getByRole('button', { name: 'キャンセル' });\n    fireEvent.click(キャンセルボタン);\n    expect(mockRouterPush).toHaveBeenCalledWith('/contracts');\n  });\n});\n\"}"
+        }
+      ]
+    }
+  ]
+}

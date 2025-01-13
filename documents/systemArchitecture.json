@@ -1,0 +1,6 @@
+{
+  "key": "systemArchitecture",
+  "value": {
+    "mermaid": "graph TD\n    subgraph Frontend\n      A[契約担当者] --> B[契約書作成画面]\n      A --> C[契約書管理画面]\n      D[法務担当者] --> C\n      B --> E[契約書プレビュー画面]\n      B --> F[PDFプレビュー画面]\n      C --> G[Markdown契約書表示画面]\n      C --> H[契約書一覧表示画面]\n    end\n    subgraph Backend\n      I[APIサーバー] --> J[契約書作成サービス]\n      I --> K[契約書管理サービス]\n      J --> L[契約書自動生成]\n      J --> M[条項操作]\n      K --> N[契約書検索]\n      K --> O[契約書履歴管理]\n      L --> P[Markdown変換]\n      P --> Q[PDF変換]\n    end\n    subgraph Database\n       R[契約書DB]\n      S[契約書テンプレートDB]\n    end\n    subgraph External\n      T[PDF変換ライブラリ]\n    end\n\n    B --> I\n    C --> I\n    J --> R\n    J --> S\n    K --> R\n    P --> T\n    Q --> T\n"
+  }
+}

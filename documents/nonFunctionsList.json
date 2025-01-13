@@ -1,0 +1,59 @@
+{
+  "key": "nonFunctionsList",
+  "value": [
+    {
+      "id": "NON-001",
+      "category": "システム全体",
+      "non_function_name": "可用性",
+      "description": "システムは、契約担当者と法務担当者が業務時間中に利用できるよう、安定して稼働する必要がある。"
+    },
+    {
+      "id": "NON-002",
+      "category": "システム全体",
+      "non_function_name": "セキュリティ",
+      "description": "契約書データやユーザー情報を保護するために、適切なセキュリティ対策が施されている必要がある。"
+    },
+    {
+      "id": "NON-003",
+      "category": "システム全体",
+      "non_function_name": "パフォーマンス",
+      "description": "契約書の自動生成やPDF出力などの処理は、ユーザーがストレスを感じない程度の速度で完了する必要がある。"
+    },
+    {
+      "id": "NON-004",
+      "category": "操作性",
+      "non_function_name": "ユーザビリティ",
+      "description": "契約担当者や法務担当者が容易にシステムを利用できるように、直感的で分かりやすいユーザーインターフェースを提供する必要がある。"
+    },
+    {
+      "id": "NON-005",
+      "category": "保守性",
+      "non_function_name": "保守性",
+      "description": "システムの保守や機能拡張が容易に行えるように、モジュール化された設計と明確なドキュメントが必要である。"
+    },
+    {
+      "id": "NON-006",
+      "category": "拡張性",
+      "non_function_name": "拡張性",
+      "description": "将来的な契約書種類の追加や機能拡張に柔軟に対応できるような設計が必要である。"
+    },
+    {
+      "id": "NON-007",
+      "category": "データ管理",
+      "non_function_name": "データ整合性",
+      "description": "契約書データは正確に管理され、データ間で矛盾が発生しないようにする必要がある。"
+    },
+    {
+      "id": "NON-008",
+      "category": "データ管理",
+      "non_function_name": "データバックアップ",
+      "description": "システム障害やデータ損失に備え、定期的なデータバックアップと復旧手順を確立する必要がある。"
+    },
+    {
+      "id": "NON-009",
+      "category": "出力",
+      "non_function_name": "出力品質",
+      "description": "出力されるPDFは、契約書として適切な書式と品質を保っている必要がある。"
+    }
+  ]
+}

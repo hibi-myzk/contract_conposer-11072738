@@ -1,0 +1,17 @@
+{
+  "key": "sequenceDiagram",
+  "value": [
+    {
+      "id": "契約書作成",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    User->>Frontend: テンプレート選択画面を開く\\n    Frontend->>Backend: テンプレート一覧取得要求\\n    Backend->>DB: テンプレート一覧取得\\n    DB->>Backend: テンプレート一覧データ\\n    Backend->>Frontend: テンプレート一覧データ送信\\n    Frontend->>User: テンプレート一覧表示\\n    User->>Frontend: テンプレート選択\\n    Frontend->>User: 契約書情報入力フォーム表示\\n    User->>Frontend: 契約書情報入力\\n    Frontend->>Backend: 契約書生成要求\\n    Backend->>DB: テンプレートデータ取得\\n    DB->>Backend: テンプレートデータ\\n    Backend->>Backend: 契約書自動生成処理\\n    Backend->>Frontend: 生成された契約書データ\\n    Frontend->>User: プレビュー表示\\n    User->>Frontend: 条項編集要求\\n    Frontend->>User: 条項編集画面表示\\n    User->>Frontend: 条項編集実行\\n    Frontend->>Backend: 条項更新要求\\n    Backend->>Backend: 条項番号自動調整\\n    Backend->>DB: 契約書データ保存\\n    DB->>Backend: 保存完了\\n    Backend->>Frontend: 更新完了通知\\n    Frontend->>User: 完了メッセージ表示\"\n}"
+    },
+    {
+      "id": "契約書管理",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    actor User\\n    participant Frontend\\n    participant Backend\\n    participant DB\\n\\n    User->>Frontend: 契約書一覧画面を開く\\n    Frontend->>Backend: 契約書一覧を要求\\n    Backend->>DB: 契約書データを取得\\n    DB-->>Backend: 契約書データを返却\\n    Backend-->>Frontend: 契約書一覧を返却\\n    Frontend-->>User: 契約書一覧を表示\\n\\n    alt 契約書検索\\n        User->>Frontend: 検索条件を入力\\n        Frontend->>Backend: 検索条件を送信\\n        Backend->>DB: 検索クエリを実行\\n        DB-->>Backend: 検索結果を返却\\n        Backend-->>Frontend: 検索結果を返却\\n        Frontend-->>User: 検索結果を表示\\n    end\\n\\n    alt 契約書詳細表示\\n        User->>Frontend: 契約書を選択\\n        Frontend->>Backend: 契約書詳細を要求\\n        Backend->>DB: 契約書データを取得\\n        DB-->>Backend: 契約書データを返却\\n        Backend-->>Frontend: 契約書詳細を返却\\n        Frontend-->>User: 契約書詳細を表示\\n    end\\n\\n    alt 契約書削除\\n        User->>Frontend: 削除ボタンをクリック\\n        Frontend->>User: 削除確認ダイアログを表示\\n        User->>Frontend: 削除を確認\\n        Frontend->>Backend: 削除リクエストを送信\\n        Backend->>DB: 契約書を削除\\n        DB-->>Backend: 削除完了を通知\\n        Backend-->>Frontend: 削除完了を通知\\n        Frontend-->>User: 削除完了を表示\\n    end\\n\\n    alt 履歴表示\\n        User->>Frontend: 履歴ボタンをクリック\\n        Frontend->>Backend: 履歴データを要求\\n        Backend->>DB: 履歴データを取得\\n        DB-->>Backend: 履歴データを返却\\n        Backend-->>Frontend: 履歴データを返却\\n        Frontend-->>User: 履歴を表示\\n    end\"\n}"
+    },
+    {
+      "id": "契約書出力",
+      "value": "{\n  \"mermaid\": \"sequenceDiagram\\n    actor User\\n    participant Frontend\\n    participant Backend\\n    participant DB\\n    User->>Frontend: PDFプレビューを要求\\n    Frontend->>Backend: PDFプレビューデータを要求\\n    Backend->>DB: 契約書データを取得\\n    DB-->>Backend: 契約書データを返却\\n    Backend->>Backend: PDFプレビューを生成\\n    Backend-->>Frontend: PDFプレビューデータを返却\\n    Frontend-->>User: PDFプレビューを表示\\n    User->>Frontend: PDF出力を要求\\n    Frontend->>Backend: PDF生成を要求\\n    Backend->>DB: 契約書データを取得\\n    DB-->>Backend: 契約書データを返却\\n    Backend->>Backend: PDFファイルを生成\\n    Backend->>DB: PDFパスを保存\\n    DB-->>Backend: 保存完了\\n    Backend-->>Frontend: PDF生成完了を通知\\n    Frontend-->>User: PDFダウンロードリンクを表示\\n    User->>Frontend: PDFダウンロードを実行\\n    Frontend->>Backend: PDFファイル取得を要求\\n    Backend-->>Frontend: PDFファイルを送信\\n    Frontend-->>User: PDFファイルを提供\"\n}"
+    }
+  ]
+}

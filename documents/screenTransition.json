@@ -1,0 +1,17 @@
+{
+  "key": "screenTransition",
+  "value": [
+    {
+      "id": "契約書作成",
+      "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> ContractList[契約書一覧画面]\\n    ContractList --> TemplateList[テンプレート選択画面]\\n    TemplateList --> ContractInput[契約書情報入力画面]\\n    ContractInput --> ContractPreview[契約書プレビュー画面]\\n    ContractPreview --> ClauseList[条項一覧画面]\\n    ClauseList --> ClauseEdit[条項編集画面]\\n    ClauseEdit --> ContractPreview\\n    ContractPreview --> ContractFinal[契約書確定画面]\\n    ClauseList --> ClauseAdd[条項追加画面]\\n    ClauseAdd --> ContractPreview\\n    ContractList --> TemplateRegist[テンプレート登録画面]\\n    TemplateRegist --> ContractList\\n    ContractInput --> ContractEdit[契約書情報編集画面]\\n    ContractEdit --> ContractPreview\"\n}"
+    },
+    {
+      "id": "契約書管理",
+      "value": "{\n    \"mermaid\": \"graph LR\\n    Login[ログイン画面] --> ContractList[契約書一覧画面]\\n    ContractList --> Search[契約書検索画面]\\n    ContractList --> Detail[契約書詳細画面]\\n    Search --> SearchResult[検索結果一覧画面]\\n    SearchResult --> Detail\\n    Detail --> History[変更履歴画面]\\n    Detail --> Delete[契約書削除確認画面]\\n    Detail --> MarkdownView[Markdown表示画面]\\n    Delete --> ContractList\\n    History --> Detail\"\n\n}"
+    },
+    {
+      "id": "契約書出力",
+      "value": "{\n    \"mermaid\": \"graph LR\\n    契約書一覧画面 --> 契約書詳細画面\\n    契約書詳細画面 --> PDFプレビュー画面\\n    PDFプレビュー画面 --> PDF出力完了画面\\n    PDFプレビュー画面 --> 契約書詳細画面\\n    PDF出力完了画面 --> 契約書一覧画面\\n    PDF出力完了画面 --> 契約書詳細画面\"\n}"
+    }
+  ]
+}
